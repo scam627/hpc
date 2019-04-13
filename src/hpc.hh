@@ -11,18 +11,16 @@ class matrix
   private:
     vector<vector<T>> storage;
     size_t s = 0;
-    //pair<size_t, size_t> sz(0, 0);
 
   public:
-    // constructors
-
+    //__Constructors__
     matrix(size_t sz)
     {
         storage.assign(sz, vector<T>(sz, 1));
         s = sz;
     }
 
-    // operators
+    //__Operators__
     vector<T> &operator[](int i) { return storage[i]; }
     void operator=(matrix<T> b)
     {
@@ -41,8 +39,7 @@ class matrix
         return mat;
     }
 
-    // methods
-
+    //__Methods__
     size_t size()
     {
         return s;
