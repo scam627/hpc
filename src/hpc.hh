@@ -38,7 +38,6 @@ class matrix
             for (int j = 0; j < s; j++)
                 for (int k = 0; k < s; k++)
                     mat[i][j] += storage[i][k] * b[k][j];
-
         return mat;
     }
 
