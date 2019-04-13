@@ -2,6 +2,7 @@
 #define __HPC_HH__
 
 #include <vector>
+#include <time.h>
 
 using namespace std;
 
@@ -11,17 +12,30 @@ class matrix
   private:
     vector<vector<T>> storage;
     size_t s = 0;
+    int mx = 10;
 
   public:
     //__Constructors__
-    matrix(size_t sz)
+    matrix(size_t sz) : s(sz)
     {
-        storage.assign(sz, vector<T>(sz, 1));
+        srand(time(NULL));
+        storage.assign(sz, vector<T>(sz));
+        for (auto &vect : storage)
+            for (auto &elem : vect)
+                elem = rand() % mx;
+    }
+    matrix(size_t sz, int value)
+    {
         s = sz;
+        storage.assign(sz, vector<T>(sz, value));
     }
 
     //__Operators__
-    vector<T> &operator[](int i) { return storage[i]; }
+    vector<T> &
+    operator[](int i)
+    {
+        return storage[i];
+    }
     void operator=(matrix<T> b)
     {
         for (int i = 0; i < s; i++)
@@ -30,8 +44,7 @@ class matrix
     }
     matrix<T> operator*(matrix<T> b)
     {
-        matrix<T> mat(s);
-        int ans = 0;
+        matrix<T> mat(s, 0);
         for (int i = 0; i < s; i++)
             for (int j = 0; j < s; j++)
                 for (int k = 0; k < s; k++)
