@@ -1,5 +1,5 @@
 #include <iostream>
-#include "hpc.hh"
+#include "src/hpc.hh"
 
 using namespace std;
 
