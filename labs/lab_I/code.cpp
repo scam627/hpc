@@ -20,5 +20,6 @@ int main()
     matrix<int> a(n);
     matrix<int> b(n);
     matrix<int> c = a * b;
+    matrix<int> d(n, 0);
     return 0;
 }
