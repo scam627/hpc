@@ -3,6 +3,8 @@
 
 #include <vector>
 #include <time.h>
+#include <thread>
+#include <cassert>
 
 using namespace std;
 
@@ -53,10 +55,32 @@ class matrix
     }
 
     //__Methods__
+
     size_t size()
     {
         return s;
     }
 };
+
+template <typename T>
+void mult(matrix<T> &a, matrix<T> &b, matrix<T> &c)
+{
+    assert(a.size() == b.size());
+    int sz = a.size();
+    vector<thread> threads(sz);
+    int idx = 0;
+    for (int i = 0; i < sz; i++)
+    {
+        threads[idx++] = thread([](int i, matrix<T> &a, matrix<T> &b, matrix<T> &c) {
+            int sz = a.size();
+            for (int j = 0; j < sz; j++)
+                for (int k = 0; k < sz; k++)
+                    c[i][j] += a[i][k] * b[k][j];
+        },
+                                i, ref(a), ref(b), ref(c));
+    }
+    for (auto &t : threads)
+        t.join();
+}
 
 #endif
