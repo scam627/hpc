@@ -1,25 +1,17 @@
 #include <iostream>
+#include <iomanip>
 #include "../../src/hpc.hh"
 
 using namespace std;
 
-void show(matrix<int> &m)
-{
-    for (int i = 0; i < m[0].size(); i++)
-    {
-        for (int j = 0; j < m[0].size(); j++)
-            cout << m[i][j] << " ";
-        cout << "\n";
-    }
-}
-
 int main()
 {
+    vector<int> sizes;
+    for (int i = 1; i <= 5; i++)
+        sizes.push_back(100 * i);
     int n;
     cin >> n;
-    matrix<int> a(n);
-    matrix<int> b(n);
-    matrix<int> d(n, 0);
-    matrix<int> c = a * b;
+    //parallel_test(sizes, n);
+    serial_test(sizes, n);
     return 0;
 }
