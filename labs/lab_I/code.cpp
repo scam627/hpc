@@ -19,7 +19,7 @@ int main()
     cin >> n;
     matrix<int> a(n);
     matrix<int> b(n);
-    matrix<int> c = a * b;
     matrix<int> d(n, 0);
+    matrix<int> c = a * b;
     return 0;
 }
