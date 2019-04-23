@@ -2,9 +2,9 @@
 #define __HPC_HH__
 
 #include <vector>
-#include <time.h>
 #include <thread>
 #include <cassert>
+#include "timer.hh"
 
 using namespace std;
 
@@ -104,14 +104,11 @@ void parallel_test(vector<int> &sizes, int n)
     {
         for (int j = 0; j < n; j++)
         {
-            clock_t begin_time = clock();
-            srand(time(0));
             matrix<int> a(sz);
             matrix<int> b(sz);
             matrix<int> c(sz, 0);
+            Timer t(sz);
             mult(a, b, c);
-            clock_t end_time = clock();
-            cout << sz << " " << fixed << setprecision(6) << (end_time - begin_time) * 1.0 / CLOCKS_PER_SEC << "\n";
         }
     }
 }
@@ -122,13 +119,10 @@ void serial_test(vector<int> &sizes, int n)
     {
         for (int j = 0; j < n; j++)
         {
-            clock_t begin_time = clock();
-            srand(time(0));
             matrix<int> a(sz);
             matrix<int> b(sz);
+            Timer t(sz);
             matrix<int> c = a * b;
-            clock_t end_time = clock();
-            cout << sz << " " << fixed << setprecision(6) << (end_time - begin_time) * 1.0 / CLOCKS_PER_SEC << "\n";
         }
     }
 }
