@@ -8,8 +8,8 @@ int main()
 {
     vector<int> sizes;
     int n, mx;
-    bool state = false;
-    cin >> n >> mx;
+    bool state = true;
+    cin >> n >> mx >> state;
     for (int i = 1; i <= mx; i++)
         sizes.push_back(100 * i);
     if (state)
