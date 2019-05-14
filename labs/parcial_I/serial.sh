@@ -15,8 +15,8 @@ do
     do  
         let n=$N+$i*2000
         echo $n
-        ./jacobi1d $n $NSTEPS 1 timing_serial.out >> out_serial.csv
-        ./jacobi1d $n $NSTEPS 0 timing_parallel.out >> out_parallel.csv
+        ./jacobi1d $n $NSTEPS timing_process.out >> out_process.csv
+        # ./jacobi1d $n $NSTEPS 0 timing_parallel.out >> out_parallel.csv
     done
 done
 
