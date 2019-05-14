@@ -7,7 +7,7 @@
 # ulimit -s unlimited -c unlimited
 
 N=100000
-NSTEPS=1000
+NSTEPS=5000
 
 for i in `seq  1 10`
 do
