@@ -5,6 +5,7 @@
 
 using namespace std;
 
+
 class Timer
 {
   private:
@@ -19,6 +20,6 @@ class Timer
         auto end = chrono::high_resolution_clock::now();
         auto duration =
             chrono::duration_cast<chrono::nanoseconds>(end - start).count();
-        cout << name << "," << setprecision(6) << fixed << duration * 1.0 / 1.0e9 << "\n";
+        cout << name << " , " << setprecision(15) << fixed << duration * 1.0 / 1.0e9 << "\n";
     }
 };

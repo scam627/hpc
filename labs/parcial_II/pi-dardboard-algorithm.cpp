@@ -62,123 +62,125 @@
 
 using namespace std; // Para no tener que poner "std" cada 2*3
 
-int main()
+int main(int argc, char **argv)
 { // ¡Comencemos!
 
-    // Primero lo primero ... la bienvenida ;)
-    /* Si quieres ver algo cool quita este comentario con su respectivo par de cierre 
-          cout << endl
-               << endl;
-          cout << "                       ╔═╗┌┬┐┬┬  ┬┌─┐┌┐┌  ╔═╗┌─┐┬─┐┌┬┐┌─┐┌┐┌┌─┐" << endl;
-          cout << "                       ╚═╗ │ │└┐┌┘├┤ │││  ║  ├─┤├┬┘ │││ ││││├─┤" << endl;
-          cout << "                       ╚═╝ ┴ ┴ └┘ └─┘┘└┘  ╚═╝┴ ┴┴└──┴┘└─┘┘└┘┴ ┴" << endl;
-          cout << "            ______________________________________________________________________     " << endl
-               << endl;
-          cout << "                                          PRESENTA...                                  " << endl;
-          cout << endl;
-          cout << "╔═╗┌─┐┬  ┌─┐┬ ┬┬  ┌─┐  ┌┬┐┌─┐  ╔═╗┬       ╔╦╗┌─┐┬─┐┌┬┐┌┐ ┌─┐┌─┐┬─┐┌┬┐  ╔═╗┬  ┌─┐┌─┐┬─┐┬┌┬┐┬ ┬┌┬┐" << endl;
-          cout << "║  ├─┤│  │  │ ││  │ │   ││├┤   ╠═╝│  ───   ║║├─┤├┬┘ ││├┴┐│ │├─┤├┬┘ ││  ╠═╣│  │ ┬│ │├┬┘│ │ ├─┤│││" << endl;
-          cout << "╚═╝┴ ┴┴─┘└─┘└─┘┴─┘└─┘  ─┴┘└─┘  ╩  ┴       ═╩╝┴ ┴┴└──┴┘└─┘└─┘┴ ┴┴└──┴┘  ╩ ╩┴─┘└─┘└─┘┴└─┴ ┴ ┴ ┴┴ ┴" << endl;
+     // Primero lo primero ... la bienvenida ;)
+     /* Si quieres ver algo cool quita este comentario con su respectivo par de cierre 
+               cout << endl
+                    << endl;
+               cout << "                       ╔═╗┌┬┐┬┬  ┬┌─┐┌┐┌  ╔═╗┌─┐┬─┐┌┬┐┌─┐┌┐┌┌─┐" << endl;
+               cout << "                       ╚═╗ │ │└┐┌┘├┤ │││  ║  ├─┤├┬┘ │││ ││││├─┤" << endl;
+               cout << "                       ╚═╝ ┴ ┴ └┘ └─┘┘└┘  ╚═╝┴ ┴┴└──┴┘└─┘┘└┘┴ ┴" << endl;
+               cout << "            ______________________________________________________________________     " << endl
+                    << endl;
+               cout << "                                          PRESENTA...                                  " << endl;
+               cout << endl;
+               cout << "╔═╗┌─┐┬  ┌─┐┬ ┬┬  ┌─┐  ┌┬┐┌─┐  ╔═╗┬       ╔╦╗┌─┐┬─┐┌┬┐┌┐ ┌─┐┌─┐┬─┐┌┬┐  ╔═╗┬  ┌─┐┌─┐┬─┐┬┌┬┐┬ ┬┌┬┐" << endl;
+               cout << "║  ├─┤│  │  │ ││  │ │   ││├┤   ╠═╝│  ───   ║║├─┤├┬┘ ││├┴┐│ │├─┤├┬┘ ││  ╠═╣│  │ ┬│ │├┬┘│ │ ├─┤│││" << endl;
+               cout << "╚═╝┴ ┴┴─┘└─┘└─┘┴─┘└─┘  ─┴┘└─┘  ╩  ┴       ═╩╝┴ ┴┴└──┴┘└─┘└─┘┴ ┴┴└──┴┘  ╩ ╩┴─┘└─┘└─┘┴└─┴ ┴ ┴ ┴┴ ┴" << endl;
 
-          cout << "_____________________________________________________________________________________________" << endl
-               << endl;
-          cout << "                                         ADVERTENCIA                                     " << endl;
-          cout << "Si está usando este código en un compilador online, puede ser que utilizar un número excesivo" << endl;
-          cout << " de dardos haga que el cálculo necesite tanto tiempo para ser computado que el compilador lo" << endl;
-          cout << "               aborte automáticamente. En ese caso, pruebe un número menor." << endl;
+               cout << "_____________________________________________________________________________________________" << endl
+                    << endl;
+               cout << "                                         ADVERTENCIA                                     " << endl;
+               cout << "Si está usando este código en un compilador online, puede ser que utilizar un número excesivo" << endl;
+               cout << " de dardos haga que el cálculo necesite tanto tiempo para ser computado que el compilador lo" << endl;
+               cout << "               aborte automáticamente. En ese caso, pruebe un número menor." << endl;
 
-    */
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     */
+     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    double N = 123456; // NÚMERO DE PUNTOS ALEATORIOS A LANZAR. ¡ESTA ES LA BAINA QUE PODEMOS CAMBIAR PARA MEJORAR LA PRECISION DEL CALCULO!
+     long long N; // NÚMERO DE PUNTOS ALEATORIOS A LANZAR. ¡ESTA ES LA BAINA QUE PODEMOS CAMBIAR PARA MEJORAR LA PRECISION DEL CALCULO!
+     N = (argc > 1) ? atoi(argv[1]) : 100;
+     //cin >> N;
+     Timer t(N);
+     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     // Mostramos el número por teminal:
+     /* Si quieres ver algo cool quita este comentario con su respectivo par de cierre
+               cout << endl
+                    << "  ╔════════════════════════════════════════════════════════════════════════════════════════╗";
+               cout << endl
+                    << "  ║                         Número de 'dardos' a lanzar :   " << N;
+               cout << endl
+                    << "  ╚════════════════════════════════════════════════════════════════════════════════════════╝";
+               */
+     double r = 1; // RADIO DEL CÍRCULO: Podes cambiar este número si lo deseas; el tamaño de la circunferencia no afecta a pi.
 
-    // Mostramos el número por teminal:
-    /* Si quieres ver algo cool quita este comentario con su respectivo par de cierre
-          cout << endl
-               << "  ╔════════════════════════════════════════════════════════════════════════════════════════╗";
-          cout << endl
-               << "  ║                         Número de 'dardos' a lanzar :   " << N;
-          cout << endl
-               << "  ╚════════════════════════════════════════════════════════════════════════════════════════╝";
-          */
-    double r = 1; // RADIO DEL CÍRCULO: Podes cambiar este número si lo deseas; el tamaño de la circunferencia no afecta a pi.
+     srand((unsigned)time(0)); // Aqui le estamos dando el tiempo de reloj como semilla para que nuestro PC calcule los números aleatorios
+                                   // asi aseguramos que se generen números aleatorios distintos.
 
-    srand((unsigned)time(0)); // Aqui le estamos dando el tiempo de reloj como semilla para que nuestro PC calcule los números aleatorios
-                              // asi aseguramos que se generen números aleatorios distintos.
+     double x; // Defino las coordenadas de cada punto aleatorio. No queremos guardarlas; reescribiremos estas variable.
+     double y;
 
-    double x; // Defino las coordenadas de cada punto aleatorio. No queremos guardarlas; reescribiremos estas variable.
-    double y;
+     double c = 0; // Defino el número de puntos dentro del círculo (de la porción). Partimos de 0.
 
-    double c = 0; // Defino el número de puntos dentro del círculo (de la porción). Partimos de 0.
+     int iter = 10; // iter. NÚMERO DE REPETICIONES DEL MÉTODO. Podes cambiar este número si lo deseas.
 
-    int iter = 10; // iter. NÚMERO DE REPETICIONES DEL MÉTODO. Podes cambiar este número si lo deseas.
+     double pi_ar[iter]; // Defino el arreglo que voy a llenar de los distintos pi's que obtenga.
 
-    double pi_ar[iter]; // Defino el arreglo que voy a llenar de los distintos pi's que obtenga.
+     for (int j = 0; j < iter; j++)
+     { // Primer BUCLE. Repetirá el dardboard algorithm "iter" veces.
 
-    for (int j = 0; j < iter; j++)
-    { // Primer BUCLE. Repetirá el dardboard algorithm "iter" veces.
+          for (int i = 0; i < N; i++)
+          { // Segundo BUCLE. En cada vuelta, lanza un dardo.
 
-        for (int i = 0; i < N; i++)
-        { // Segundo BUCLE. En cada vuelta, lanza un dardo.
+               x = (double)rand() / (double)RAND_MAX; // Generamos dos números aleatorios desde 0 a 1. Nótese que en los siguientes
+               y = (double)rand() / (double)RAND_MAX; // lanzamientos estos números serán reescritos.
 
-            x = (double)rand() / (double)RAND_MAX; // Generamos dos números aleatorios desde 0 a 1. Nótese que en los siguientes
-            y = (double)rand() / (double)RAND_MAX; // lanzamientos estos números serán reescritos.
+               x = x * r; // Dimensiono estos números en base a el radio. Ahora van de 0 a "r". Estas son las coordenadas
+               y = y * r; // en las que ha caido un dardo.
 
-            x = x * r; // Dimensiono estos números en base a el radio. Ahora van de 0 a "r". Estas son las coordenadas
-            y = y * r; // en las que ha caido un dardo.
+               if (x * x + y * y < r * r)
+               { // Compruebo si el dardo está o no dentro del circulo. Si es así, c aumentará en uno.
+                    c++;
+               }
+          } // FIN Segundo BUCLE
 
-            if (x * x + y * y < r * r)
-            { // Compruebo si el dardo está o no dentro del circulo. Si es así, c aumentará en uno.
-                c++;
-            }
-        } // FIN Segundo BUCLE
+          pi_ar[j] = 4 * c / N; // Calculo el pi generado en esta tanda y lo guardo en el arreglo.
+          c = 0;                // Reinicio el contador de los disparos que cayeron dentro de la circunferencia.
 
-        pi_ar[j] = 4 * c / N; // Calculo el pi generado en esta tanda y lo guardo en el arreglo.
-        c = 0;                // Reinicio el contador de los disparos que cayeron dentro de la circunferencia.
+     } // FIN Primer BUCLE
 
-    } // FIN Primer BUCLE
+     double pi = 0; // Defino pi y el error de pi. Los inicializo a cero por el método para obtener la media y la SD.
+     double err = 0;
 
-    double pi = 0; // Defino pi y el error de pi. Los inicializo a cero por el método para obtener la media y la SD.
-    double err = 0;
+     for (int j = 0; j < iter; j++)
+     {
+          pi = pi_ar[j] / iter + pi; // Hago la media de todos los pi's calculados
+     }
 
-    for (int j = 0; j < iter; j++)
-    {
-        pi = pi_ar[j] / iter + pi; // Hago la media de todos los pi's calculados
-    }
+     for (int j = 0; j < iter; j++)
+     {
+          err = err + pow(pi - pi_ar[j], 2) / iter; // Calculo la desviación estándar de los pi's calculados. Consulta su definición
+     }                                             // para más info, pero es sumar estos términos y...
 
-    for (int j = 0; j < iter; j++)
-    {
-        err = err + pow(pi - pi_ar[j], 2) / iter; // Calculo la desviación estándar de los pi's calculados. Consulta su definición
-    }                                             // para más info, pero es sumar estos términos y...
+     err = sqrt(err); // ... hacer la raiz cuadrada de lo que te salga.
 
-    err = sqrt(err); // ... hacer la raiz cuadrada de lo que te salga.
+     cout.precision(15); // Establesco el número de digito de presicion que deseo ver en la pantalla.
+     /* Si quieres ver algo cool quita este comentario con su respectivo par de cierre 
+               // Mostramos los resultados en pantalla para que se los gozen :3 :
 
-    cout.precision(15); // Establesco el número de digito de presicion que deseo ver en la pantalla.
-    /* Si quieres ver algo cool quita este comentario con su respectivo par de cierre 
-          // Mostramos los resultados en pantalla para que se los gozen :3 :
-
-          cout << endl
-               << "  ╔════════════════════════════════════════════════════════════════════════════════════════╗";
-          cout << endl
-               << "  ║                       "
-               << "Pi = " << pi << "  +/-  " << err;
-          cout << endl
-               << "  ║";
-          cout << endl
-               << "  ║                "
-               << "o, dicho de otra manera, el valor de pi se encuentra entre";
-          cout << endl
-               << "  ║                       " << pi + err << "   y   " << pi - err;
-          cout << endl
-               << "  ╚════════════════════════════════════════════════════════════════════════════════════════╝" << endl
-               << endl;
-    */
-     cout << pi << "," << err << "," << time;
-    return 0; // Y listo cerramos la funcion principal con un return.
+               cout << endl
+                    << "  ╔════════════════════════════════════════════════════════════════════════════════════════╗";
+               cout << endl
+                    << "  ║                       "
+                    << "Pi = " << pi << "  +/-  " << err;
+               cout << endl
+                    << "  ║";
+               cout << endl
+                    << "  ║                "
+                    << "o, dicho de otra manera, el valor de pi se encuentra entre";
+               cout << endl
+                    << "  ║                       " << pi + err << "   y   " << pi - err;
+               cout << endl
+                    << "  ╚════════════════════════════════════════════════════════════════════════════════════════╝" << endl
+                    << endl;
+     */
+     cout << pi << " , " << err << " , ";
+     return 0; // Y listo cerramos la funcion principal con un return.
 }

@@ -50,14 +50,17 @@
 #include <iostream>
 #include <cmath>
 #include <fstream>
+#include "../../src/timer.hh"
 
 using namespace std;
 
 const double rpi = 3.1415926535897932384626433832795;
 
-int main()
+int main(int argc, char **argv)
 {
-    double N = 123456;
+    long long N = 123456;
+    N = (argc > 1) ? atoi(argv[1]) : 100;
+    Timer t(N);
     double l = 1.0;
 
     double c = 0;
@@ -105,9 +108,7 @@ int main()
 
     cout.precision(15);
 
-    cout << pi << " " << err << "\n";
-
-    cout << pi + err << " " << pi - err << "\n";
+    cout << pi << " , " << err << " , ";
 
     return 0;
 }
