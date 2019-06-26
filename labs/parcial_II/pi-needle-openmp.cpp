@@ -113,8 +113,8 @@ int main(int argc, char **argv)
         for (int i = 0; i < numChunks; i++) {
             UniformDistribution distribution;
             for (k = 0; k < chunk; k++) {
-                x = distribution.sample() * 0.5;
-                double alpha = distribution.sample() * rpi;
+                x = fabs(distribution.sample()) * 0.5;
+                double alpha = fabs(distribution.sample()) * rpi;
 
                 y = (l / 2.0) * sin(alpha);
 
