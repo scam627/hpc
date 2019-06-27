@@ -58,9 +58,38 @@
 #include <iostream> // Libreria para el manejo de entrada y salida de texto y otras cositas
 #include <cmath>    // "cmath" es una colección de funciones matemáticas que necesito, como elevar al cuadrado y hacer la raiz cuadrada.
 #include <fstream>
+#include <random>
+#include <mpi.h>
 #include "../../src/timer.hh"
 
 using namespace std; // Para no tener que poner "std" cada 2*3
+
+class UniformDistribution
+{
+public:
+    UniformDistribution() 
+        : generator(),
+          distribution(-1.0, 1.0)
+    {
+        int seed = std::chrono::system_clock::now().time_since_epoch().count();
+        generator.seed(seed);
+    }
+
+    double sample() 
+    {
+        return distribution(generator);
+    }
+    
+    UniformDistribution(const UniformDistribution& ) = delete;
+    UniformDistribution& operator()(const UniformDistribution& ) = delete;
+    UniformDistribution(UniformDistribution&& ) = delete;
+    UniformDistribution& operator()(UniformDistribution&& ) = delete;
+
+private:
+    std::default_random_engine generator;
+    
+    std::uniform_real_distribution<double> distribution;
+};
 
 int main(int argc, char **argv)
 { // ¡Comencemos!
@@ -92,9 +121,20 @@ int main(int argc, char **argv)
      //////////////////////////////////////////////////////////////////////////////////////////////////////////////
      //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-     long long N; // NÚMERO DE PUNTOS ALEATORIOS A LANZAR. ¡ESTA ES LA BAINA QUE PODEMOS CAMBIAR PARA MEJORAR LA PRECISION DEL CALCULO!
-     N = (argc > 1) ? atoi(argv[1]) : 100;
-     //cin >> N;
+     int master = 0;
+     int ierr;
+     int process_num;
+     int process_rank;
+     /* Initialize MPI. */
+     ierr = MPI_Init ( &argc, &argv );
+     /* Get the number of processes. */
+     ierr = MPI_Comm_size ( MPI_COMM_WORLD, &process_num );
+     /* Get the rank of this process. */
+     ierr = MPI_Comm_rank ( MPI_COMM_WORLD, &process_rank );
+
+     long long N = 10000000; // NÚMERO DE PUNTOS ALEATORIOS A LANZAR. ¡ESTA ES LA BAINA QUE PODEMOS CAMBIAR PARA MEJORAR LA PRECISION DEL CALCULO!
+     // N = (argc > 1) ? atoi(argv[1]) : 100;
+     // cin >> N;
      Timer t(N);
      //////////////////////////////////////////////////////////////////////////////////////////////////////////////
      //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -117,70 +157,39 @@ int main(int argc, char **argv)
      double x; // Defino las coordenadas de cada punto aleatorio. No queremos guardarlas; reescribiremos estas variable.
      double y;
 
-     double c = 0; // Defino el número de puntos dentro del círculo (de la porción). Partimos de 0.
+     // double c = 0; // Defino el número de puntos dentro del círculo (de la porción). Partimos de 0.
 
      int iter = 10; // iter. NÚMERO DE REPETICIONES DEL MÉTODO. Podes cambiar este número si lo deseas.
+     int c = 0, c_total;
+     int chunk = N / process_num;
 
-     double pi_ar[iter]; // Defino el arreglo que voy a llenar de los distintos pi's que obtenga.
+     // double pi_ar[iter]; // Defino el arreglo que voy a llenar de los distintos pi's que obtenga.
+     
+     UniformDistribution distribution;
+     for (int k = 0; k < N; k++) {
+          x = distribution.sample(); // Generamos dos números aleatorios desde 0 a 1. Nótese que en los siguientes
+          y = distribution.sample(); // lanzamientos estos números serán reescritos.
 
-     for (int j = 0; j < iter; j++)
-     { // Primer BUCLE. Repetirá el dardboard algorithm "iter" veces.
+          x = x * r; // Dimensiono estos números en base a el radio. Ahora van de 0 a "r". Estas son las coordenadas
+          y = y * r; // en las que ha caido un dardo.
 
-          for (int i = 0; i < N; i++)
-          { // Segundo BUCLE. En cada vuelta, lanza un dardo.
+          if (x * x + y * y < r * r)
+          { // Compruebo si el dardo está o no dentro del circulo. Si es así, c aumentará en uno.
+               c++;
+          }
+     } // FIN Segundo BUCLE
 
-               x = (double)rand() / (double)RAND_MAX; // Generamos dos números aleatorios desde 0 a 1. Nótese que en los siguientes
-               y = (double)rand() / (double)RAND_MAX; // lanzamientos estos números serán reescritos.
+     ierr = MPI_Reduce ( &c, &c_total, 1, MPI_INT, MPI_SUM, master, MPI_COMM_WORLD );
 
-               x = x * r; // Dimensiono estos números en base a el radio. Ahora van de 0 a "r". Estas son las coordenadas
-               y = y * r; // en las que ha caido un dardo.
+     /* Terminate MPI. */
+     ierr = MPI_Finalize ( );
 
-               if (x * x + y * y < r * r)
-               { // Compruebo si el dardo está o no dentro del circulo. Si es así, c aumentará en uno.
-                    c++;
-               }
-          } // FIN Segundo BUCLE
-
-          pi_ar[j] = 4 * c / N; // Calculo el pi generado en esta tanda y lo guardo en el arreglo.
-          c = 0;                // Reinicio el contador de los disparos que cayeron dentro de la circunferencia.
-
-     } // FIN Primer BUCLE
-
-     double pi = 0; // Defino pi y el error de pi. Los inicializo a cero por el método para obtener la media y la SD.
-     double err = 0;
-
-     for (int j = 0; j < iter; j++)
-     {
-          pi = pi_ar[j] / iter + pi; // Hago la media de todos los pi's calculados
+     if (process_rank == 0) {
+          double pi_total = (4.0 * c_total) / (N * process_num);
+          cout << "PI = " << pi_total << endl;
      }
 
-     for (int j = 0; j < iter; j++)
-     {
-          err = err + pow(pi - pi_ar[j], 2) / iter; // Calculo la desviación estándar de los pi's calculados. Consulta su definición
-     }                                             // para más info, pero es sumar estos términos y...
-
-     err = sqrt(err); // ... hacer la raiz cuadrada de lo que te salga.
-
-     cout.precision(15); // Establesco el número de digito de presicion que deseo ver en la pantalla.
-     /* Si quieres ver algo cool quita este comentario con su respectivo par de cierre 
-               // Mostramos los resultados en pantalla para que se los gozen :3 :
-
-               cout << endl
-                    << "  ╔════════════════════════════════════════════════════════════════════════════════════════╗";
-               cout << endl
-                    << "  ║                       "
-                    << "Pi = " << pi << "  +/-  " << err;
-               cout << endl
-                    << "  ║";
-               cout << endl
-                    << "  ║                "
-                    << "o, dicho de otra manera, el valor de pi se encuentra entre";
-               cout << endl
-                    << "  ║                       " << pi + err << "   y   " << pi - err;
-               cout << endl
-                    << "  ╚════════════════════════════════════════════════════════════════════════════════════════╝" << endl
-                    << endl;
-     */
-     cout << pi << " , " << err << " , ";
+     cout << 4.0 * c / N << " , ";
+     
      return 0; // Y listo cerramos la funcion principal con un return.
 }
