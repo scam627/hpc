@@ -1,0 +1,116 @@
+/*
+ ███████╗████████╗██╗██╗   ██╗███████╗███╗   ██╗     ██████╗ █████╗ ██████╗ ██████╗  ██████╗ ███╗   ██╗ █████╗ 
+ ██╔════╝╚══██╔══╝██║██║   ██║██╔════╝████╗  ██║    ██╔════╝██╔══██╗██╔══██╗██╔══██╗██╔═══██╗████╗  ██║██╔══██╗
+ ███████╗   ██║   ██║██║   ██║█████╗  ██╔██╗ ██║    ██║     ███████║██████╔╝██║  ██║██║   ██║██╔██╗ ██║███████║
+ ╚════██║   ██║   ██║╚██╗ ██╔╝██╔══╝  ██║╚██╗██║    ██║     ██╔══██║██╔══██╗██║  ██║██║   ██║██║╚██╗██║██╔══██║
+ ███████║   ██║   ██║ ╚████╔╝ ███████╗██║ ╚████║    ╚██████╗██║  ██║██║  ██║██████╔╝╚██████╔╝██║ ╚████║██║  ██║
+ ╚══════╝   ╚═╝   ╚═╝  ╚═══╝  ╚══════╝╚═╝  ╚═══╝     ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═╝
+ 
+                                                                PRESENTA
+                       _____________________________________________________________________________________________
+
+                            __                             _                        
+                             _)      |\| _  _  _| |  _    |_| |  _  _  ._ o _|_ |_ ._ _ 
+                            /__ o    | |(/_(/_(_| | (/_   | | | (_|(_) |  |  |_ | || | |
+                                    _                            _|                                       
+
+ Con este código, escrito en C++, vamos calcular pi utilizando el método de las gujas de Buffon
+ 
+ Si quieres saber las ideas básicas de este algoritmo o no sabes como pu***s has llegado aquí y qué es este código puedes enviarme un mensaje
+ al siguiente correo stiven.cardona627@gmail.com
+
+ 
+ Sabemos que vamos a calcular pi a partir de la proporción entre los puntos puntos totales y los puntos aleatorios que cruzan las lineas paralelas 
+ dibujadas en nuestro plano. Puesto en ecuaciones:
+ 
+                                            2  (nº de agujas "lanzadas")
+                                    pi = -----------------------------------------
+                                             (nº de agujas que cruzan una linea)
+ 
+ Pille puess: aquí debemos pensar en una manera de aleatorizar la generación de agujas (needles) de longitud l, mejor dicho dado un angulo
+ al que llamaremos alpha y un centro con cordenadas cx, cy haremos una función que nos dira si nuestra aguja cruza alguna linea, lo mejor 
+ es  que nuestros calculos solo los hagamos sobre el cuadrante positivo
+ 
+ Además, no solo vamos a hacer esto una vez: se realizaran varias tandas de lanzamientos, cada una con el mismo número de agujas aleatorias 
+ a lanzar. Dado que los resultados de Montecarlo no son los mismos en cada ejecución del programa (dada la naturaleza aleatoria 
+ del cálculo), haremos que el código repita el método un cierto número de veces para hacer estadística con los varios pi's que nos 
+ saque. Obtendremos media y desviación estándar, con lo que tendremos una estimación del error del método. En pocas palabras: tendremos 
+ un pi fiable, no tan dependiente de la ejecución y con un error que nos permita acotar el valor exacto.
+ 
+ Así nombre a cada variable:
+
+    *   N = número de aguajas lanzadas
+    *   l = largo de la aguja
+    *   x = coordenada en x del centro
+    *   y = coordenada en y del extremo de la aguja
+    *   alpha = angulo de inclinación de la aguja
+    *   c = número de agujas que cruzan una linea
+
+*/
+#include <iostream>
+#include <cmath>
+#include <fstream>
+#include <random>
+#include <mpi.h>
+#include "../../src/timer.hh"
+
+class UniformDistribution
+{
+public:
+    UniformDistribution() 
+        : generator(),
+          distribution(-1.0, 1.0)
+    {
+        int seed = std::chrono::system_clock::now().time_since_epoch().count();
+        generator.seed(seed);
+    }
+
+    double sample() 
+    {
+        return distribution(generator);
+    }
+    
+    UniformDistribution(const UniformDistribution& ) = delete;
+    UniformDistribution& operator()(const UniformDistribution& ) = delete;
+    UniformDistribution(UniformDistribution&& ) = delete;
+    UniformDistribution& operator()(UniformDistribution&& ) = delete;
+
+private:
+    std::default_random_engine generator;
+    
+    std::uniform_real_distribution<double> distribution;
+};
+
+using namespace std;
+
+const double rpi = 3.1415926535897932384626433832795;
+
+int main(int argc, char **argv)
+{
+    /* Initialize MPI. */
+    int ierr = MPI_Init ( &argc, &argv );
+
+    long long N = 1000000000;
+    // N = (argc > 1) ? atoi(argv[1]) : 100;
+    Timer t(N);
+    double l = 1.0;
+
+    UniformDistribution distribution;
+
+    int c = 0;
+    
+    for (int i = 0; i < N; i++) {
+        double x = fabs(distribution.sample()) * 0.5;
+        double alpha = fabs(distribution.sample()) * rpi;
+
+        double y = (l / 2.0) * sin(alpha);
+
+        c = c + (x <= y);
+    }
+
+    cout.precision(15);
+
+    cout << fixed << 2.0 * N / c << " , ";
+
+    return 0;
+}
